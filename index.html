@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<style>
+    body{
+      text-align: center;
+    }
+</style>  
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Typing Test</title>
+	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+	<script src="https://unpkg.com/alpinejs" defer>
+
+	</script>
+</head>
+
+<body class="bg-gray-900 text-gray-100">
+	<div x-data="data()">
+		<h1 class="text-3xl">Typing Speed Calculator</h1>
+		<button @click="startTest()" class = "bg-blue-500 py-2 px-4 rounded mt-4">Start Test</button>
+    <div x-show="question != ''" class="bg-gray-800 p-4 mt-4" x-text="question"></div>
+    <div class = "mt-4">
+      <textarea x-model="solution" id="solution_textarea" class = "w-1/2 h-64 text-gray-900 p-4 focus:outline-none" readonly @keyup="checkFinished()"></textarea>
+    </div>
+    <div class="mt-4">
+     Time: <span x-text="time"></span>s |
+     Words: <span x-text="words"></span> |
+     WPM: <span x-text="wpm"></span> |
+     CPM: <span x-text="cpm"></span> 
+    </div>
+  </div>  
+ <script src="script.js"></script>
+</body>
+</html>
