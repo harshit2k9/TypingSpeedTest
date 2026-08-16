@@ -1,77 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Modern Typing Test</title>
-	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-	<script src="https://unpkg.com/alpinejs" defer></script>
-</head>
+function data() {
+  return {
+    interval: null,
+    questions: [
+      "What if a writer or novelist decided to write a 300-page book with no breaks in the text for new ideas, new chapters, or even character dialogue? It would be so overwhelming that the reader would probably take one look and close the book forever. When writing is divided up into manageable parts that are cohesive, it's much easier for the reader to take in and process. A paragraph is a distinct segment of writing, often includes more than one sentence, and is separated from other paragraphs and text by a space. Paragraphs break up text into manageable chunks that are easily read and visually make it more appealing and less daunting. The word paragraph comes from the Latin word paragraphos, which is roughly translated to mean a short-stroke marking a break in sense. The term graph is Latin for writing. There is often some confusion about what the difference is between a paragraph and an essay. The best way to understand the difference is to think of the essay as a bigger version of a paragraph. A paragraph is made up of a topic sentence, supporting sentences, and a concluding sentence. An essay has all the same parts; only instead of sentences, an essay is made up of paragraphs.",
+      "It is important to note that a paragraph does not have a minimum or maximum number of sentences that it must have to fit the definition of a paragraph. Some writers will opt to use very short paragraphs, while others will include dozens of sentences in their paragraphs. It is also important to know that most writers separate lines of dialogue into paragraphs, so if a character only speaks a single line, it will be its own paragraph. Keeping that in mind, there is a general agreement on the format of a standard paragraph, which especially applies to informational and argumentative or persuasive writing. A paragraph should be divided into three distinct sections that each serve a purpose to the paragraph as a whole.",
+      "Girl education is an issue that needs our consideration. It is probably the most severe issue globally. Everybody realizes that education is the essential need of us all. Girls likewise need the education to run their life smoothly. We, as a whole need to comprehend our commitment to this issue and co-work. Most importantly, we must be delicate to the future of ladies in our family. We should move in the direction of giving all the essential and propelled education to the little girls in our family. Likewise, we should not force them to marry, and they finish their education. Numerous individuals can’t educate their girls because of the absence of sufficient money. The amount of such people is the most in India. It’s anything but a complex issue. We can expel it by giving fundamental education either at a low or free from cost. It will help girls in having essential education and will make them qualified to continue in this cruel world.",
+      "Education is important for both men and women as both have an essential role in the development of a healthy and smart society. Education is a necessary way for delivering a brilliant future and at the same time performs the most significant part in the growth and improvement of the nation. The citizens of the nation are responsible for the greater future and progress of the nation. Extremely educated citizens form the foundation of a developed nation. Hence, decent education builds a brilliant tomorrow for both the individual and the nation. It is only educated directors who make the country and bring it to the top of prosperity and growth. Education makes everyone brilliant and as excellent as possible."
+    ],
+    question: "",
+    solution: "",
+    time: 0,
+    words: 0,
+    wpm: 0,
+    characters: 0,
+    cpm: 0,
+    testStarted: false,
+    
+    startTest() {
+      if (this.interval) {
+        clearInterval(this.interval);
+      }
 
-<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
-	<div x-data="data()" class="w-full max-w-5xl bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-700">
-		<header class="flex justify-between items-center mb-6">
-			<h1 class="text-2xl font-bold tracking-wide text-blue-400">⚡ Typing Speed Test</h1>
-			<button @click="startTest()" 
-					class="bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 px-6 rounded-xl transition duration-200 shadow-lg">
-				<span x-text="testStarted ? 'Restart Test' : 'Start Test'"></span>
-			</button>
-		</header>
+      let random = Math.floor(Math.random() * this.questions.length);
+      this.question = this.questions[random];
+      this.solution = "";
+      this.time = 0;
+      this.words = 0;
+      this.wpm = 0;
+      this.cpm = 0;
+      this.testStarted = true;
 
-		<!-- Main Content Container: Split into Text Area (Left) and Results Sidebar (Right) -->
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-			
-			<!-- Left Side: Test Area (Span 2 cols) -->
-			<div class="lg:col-span-2 flex flex-col">
-				<!-- Target Text Box -->
-				<div x-show="question != ''" 
-					 class="bg-gray-900 p-5 rounded-xl mb-4 text-gray-300 leading-relaxed text-base tracking-wide border border-gray-700 select-none min-h-[140px] max-h-[200px] overflow-y-auto" 
-					 x-text="question">
-				</div>
-				
-				<div x-show="question == ''" class="bg-gray-900 p-5 rounded-xl mb-4 text-gray-500 text-center text-base italic border border-gray-700 min-h-[140px] flex items-center justify-center">
-					Click "Start Test" to begin typing...
-				</div>
+      const textarea = document.getElementById("solution_textarea");
+      textarea.readOnly = false;
+      textarea.value = "";
+      textarea.focus();
 
-				<!-- Solution Input Area -->
-				<div>
-					<textarea x-model="solution" 
-							  id="solution_textarea" 
-							  class="w-full h-36 bg-gray-900 text-gray-100 p-4 rounded-xl border border-gray-700 focus:border-blue-500 focus:outline-none resize-none text-base leading-relaxed shadow-inner" 
-							  placeholder="Start typing the text above here..." 
-							  readonly 
-							  @input="checkFinished()"></textarea>
-				</div>
-			</div>
+      this.interval = setInterval(() => {
+        this.time++;
+        this.calculateMetrics();
+      }, 1000);
+    },
 
-			<!-- Right Side: Statistics Result Dashboard -->
-			<div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col justify-between space-y-4">
-				<h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider text-center border-b border-gray-800 pb-2">Live Metrics</h2>
-				
-				<div class="text-center">
-					<div class="text-xs text-gray-400 uppercase tracking-wider">Time Elapsed</div>
-					<div class="text-3xl font-bold text-blue-400 mt-1"><span x-text="time"></span>s</div>
-				</div>
+    calculateMetrics() {
+      if (this.time === 0) return;
+      
+      // Strict matching check: Count how many characters match the prompt prefix
+      let matchedLength = 0;
+      for (let i = 0; i < this.solution.length; i++) {
+        if (this.solution[i] === this.question[i]) {
+          matchedLength++;
+        } else {
+          // Stop counting correctly matched metrics if there is a mismatch
+          break; 
+        }
+      }
 
-				<div class="text-center">
-					<div class="text-xs text-gray-400 uppercase tracking-wider">Words Typed</div>
-					<div class="text-3xl font-bold text-green-400 mt-1" x-text="words"></div>
-				</div>
+      const matchedString = this.solution.substring(0, matchedLength);
+      const wordCount = matchedString.trim() === "" ? 0 : matchedString.trim().split(/\s+/).length;
 
-				<div class="text-center">
-					<div class="text-xs text-gray-400 uppercase tracking-wider">Words Per Min (WPM)</div>
-					<div class="text-3xl font-bold text-yellow-400 mt-1" x-text="wpm"></div>
-				</div>
+      this.words = wordCount;
+      this.characters = matchedLength;
+      this.wpm = Math.round((wordCount / this.time) * 60);
+      this.cpm = Math.round((matchedLength / this.time) * 60);
+    },
 
-				<div class="text-center">
-					<div class="text-xs text-gray-400 uppercase tracking-wider">Chars Per Min (CPM)</div>
-					<div class="text-3xl font-bold text-purple-400 mt-1" x-text="cpm"></div>
-				</div>
-			</div>
+    checkFinished() {
+      this.calculateMetrics();
 
-		</div>
-	</div>
-
-	<script src="script.js"></script>
-</body>
-</html>
+      // Ensure every single word/character matches precisely before completing the test
+      if (this.question === this.solution) {
+        document.getElementById("solution_textarea").readOnly = true;
+        clearInterval(this.interval);
+        this.testStarted = false;
+      }
+    }
+  };
+}
