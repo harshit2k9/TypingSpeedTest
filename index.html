@@ -1,35 +1,64 @@
 <!DOCTYPE html>
-<html>
-<style>
-    body{
-      text-align: center;
-    }
-</style>  
+<html lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
-	<title>Typing Test</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Modern Typing Test</title>
 	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-	<script src="https://unpkg.com/alpinejs" defer>
-
-	</script>
+	<script src="https://unpkg.com/alpinejs" defer></script>
 </head>
 
-<body class="bg-gray-900 text-gray-100">
-	<div x-data="data()">
-		<h1 class="text-3xl">Typing Speed Calculator</h1>
-		<button @click="startTest()" class = "bg-blue-500 py-2 px-4 rounded mt-4">Start Test</button>
-    <div x-show="question != ''" class="bg-gray-800 p-4 mt-4" x-text="question"></div>
-    <div class = "mt-4">
-      <textarea x-model="solution" id="solution_textarea" class = "w-1/2 h-64 text-gray-900 p-4 focus:outline-none" readonly @keyup="checkFinished()"></textarea>
-    </div>
-    <div class="mt-4">
-     Time: <span x-text="time"></span>s |
-     Words: <span x-text="words"></span> |
-     WPM: <span x-text="wpm"></span> |
-     CPM: <span x-text="cpm"></span> 
-    </div>
-  </div>  
- <script src="script.js"></script>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
+	<div x-data="data()" class="w-full max-w-3xl bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-700">
+		<header class="flex justify-between items-center mb-6">
+			<h1 class="text-2xl font-bold tracking-wide text-blue-400">⚡ Typing Speed Test</h1>
+			<button @click="startTest()" 
+					class="bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 px-6 rounded-xl transition duration-200 shadow-lg">
+				<span x-text="testStarted ? 'Restart Test' : 'Start Test'"></span>
+			</button>
+		</header>
+
+		<!-- Question / Target Text Box -->
+		<div x-show="question != ''" 
+			 class="bg-gray-900 p-5 rounded-xl mb-6 text-gray-300 leading-relaxed text-lg tracking-wide border border-gray-700 select-none min-h-[120px] flex items-center" 
+			 x-text="question">
+		</div>
+		
+		<div x-show="question == ''" class="bg-gray-900 p-5 rounded-xl mb-6 text-gray-500 text-center text-lg italic border border-gray-700 min-h-[120px] flex items-center justify-center">
+			Click "Start Test" to begin typing...
+		</div>
+
+		<!-- Solution Input Area -->
+		<div class="mb-6">
+			<textarea x-model="solution" 
+					  id="solution_textarea" 
+					  class="w-full h-40 bg-gray-900 text-gray-100 p-4 rounded-xl border border-gray-700 focus:border-blue-500 focus:outline-none resize-none text-lg leading-relaxed shadow-inner" 
+					  placeholder="Start typing the text above here..." 
+					  readonly 
+					  @input="checkFinished()"></textarea>
+		</div>
+
+		<!-- Live Statistics Dashboard -->
+		<div class="grid grid-cols-4 gap-4 bg-gray-900 p-4 rounded-xl border border-gray-700 text-center">
+			<div>
+				<div class="text-xs text-gray-400 uppercase tracking-wider">Time</div>
+				<div class="text-2xl font-bold text-blue-400"><span x-text="time"></span>s</div>
+			</div>
+			<div>
+				<div class="text-xs text-gray-400 uppercase tracking-wider">Words</div>
+				<div class="text-2xl font-bold text-green-400" x-text="words"></div>
+			</div>
+			<div>
+				<div class="text-xs text-gray-400 uppercase tracking-wider">WPM</div>
+				<div class="text-2xl font-bold text-yellow-400" x-text="wpm"></div>
+			</div>
+			<div>
+				<div class="text-xs text-gray-400 uppercase tracking-wider">CPM</div>
+				<div class="text-2xl font-bold text-purple-400" x-text="cpm"></div>
+			</div>
+		</div>
+	</div>
+
+	<script src="script.js"></script>
 </body>
 </html>
