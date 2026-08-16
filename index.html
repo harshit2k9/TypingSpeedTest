@@ -9,7 +9,7 @@
 </head>
 
 <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
-	<div x-data="data()" class="w-full max-w-3xl bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-700">
+	<div x-data="data()" class="w-full max-w-5xl bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-700">
 		<header class="flex justify-between items-center mb-6">
 			<h1 class="text-2xl font-bold tracking-wide text-blue-400">⚡ Typing Speed Test</h1>
 			<button @click="startTest()" 
@@ -18,44 +18,57 @@
 			</button>
 		</header>
 
-		<!-- Question / Target Text Box -->
-		<div x-show="question != ''" 
-			 class="bg-gray-900 p-5 rounded-xl mb-6 text-gray-300 leading-relaxed text-lg tracking-wide border border-gray-700 select-none min-h-[120px] flex items-center" 
-			 x-text="question">
-		</div>
-		
-		<div x-show="question == ''" class="bg-gray-900 p-5 rounded-xl mb-6 text-gray-500 text-center text-lg italic border border-gray-700 min-h-[120px] flex items-center justify-center">
-			Click "Start Test" to begin typing...
-		</div>
+		<!-- Main Content Container: Split into Text Area (Left) and Results Sidebar (Right) -->
+		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+			
+			<!-- Left Side: Test Area (Span 2 cols) -->
+			<div class="lg:col-span-2 flex flex-col">
+				<!-- Target Text Box -->
+				<div x-show="question != ''" 
+					 class="bg-gray-900 p-5 rounded-xl mb-4 text-gray-300 leading-relaxed text-base tracking-wide border border-gray-700 select-none min-h-[140px] max-h-[200px] overflow-y-auto" 
+					 x-text="question">
+				</div>
+				
+				<div x-show="question == ''" class="bg-gray-900 p-5 rounded-xl mb-4 text-gray-500 text-center text-base italic border border-gray-700 min-h-[140px] flex items-center justify-center">
+					Click "Start Test" to begin typing...
+				</div>
 
-		<!-- Solution Input Area -->
-		<div class="mb-6">
-			<textarea x-model="solution" 
-					  id="solution_textarea" 
-					  class="w-full h-40 bg-gray-900 text-gray-100 p-4 rounded-xl border border-gray-700 focus:border-blue-500 focus:outline-none resize-none text-lg leading-relaxed shadow-inner" 
-					  placeholder="Start typing the text above here..." 
-					  readonly 
-					  @input="checkFinished()"></textarea>
-		</div>
+				<!-- Solution Input Area -->
+				<div>
+					<textarea x-model="solution" 
+							  id="solution_textarea" 
+							  class="w-full h-36 bg-gray-900 text-gray-100 p-4 rounded-xl border border-gray-700 focus:border-blue-500 focus:outline-none resize-none text-base leading-relaxed shadow-inner" 
+							  placeholder="Start typing the text above here..." 
+							  readonly 
+							  @input="checkFinished()"></textarea>
+				</div>
+			</div>
 
-		<!-- Live Statistics Dashboard -->
-		<div class="grid grid-cols-4 gap-4 bg-gray-900 p-4 rounded-xl border border-gray-700 text-center">
-			<div>
-				<div class="text-xs text-gray-400 uppercase tracking-wider">Time</div>
-				<div class="text-2xl font-bold text-blue-400"><span x-text="time"></span>s</div>
+			<!-- Right Side: Statistics Result Dashboard -->
+			<div class="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col justify-between space-y-4">
+				<h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider text-center border-b border-gray-800 pb-2">Live Metrics</h2>
+				
+				<div class="text-center">
+					<div class="text-xs text-gray-400 uppercase tracking-wider">Time Elapsed</div>
+					<div class="text-3xl font-bold text-blue-400 mt-1"><span x-text="time"></span>s</div>
+				</div>
+
+				<div class="text-center">
+					<div class="text-xs text-gray-400 uppercase tracking-wider">Words Typed</div>
+					<div class="text-3xl font-bold text-green-400 mt-1" x-text="words"></div>
+				</div>
+
+				<div class="text-center">
+					<div class="text-xs text-gray-400 uppercase tracking-wider">Words Per Min (WPM)</div>
+					<div class="text-3xl font-bold text-yellow-400 mt-1" x-text="wpm"></div>
+				</div>
+
+				<div class="text-center">
+					<div class="text-xs text-gray-400 uppercase tracking-wider">Chars Per Min (CPM)</div>
+					<div class="text-3xl font-bold text-purple-400 mt-1" x-text="cpm"></div>
+				</div>
 			</div>
-			<div>
-				<div class="text-xs text-gray-400 uppercase tracking-wider">Words</div>
-				<div class="text-2xl font-bold text-green-400" x-text="words"></div>
-			</div>
-			<div>
-				<div class="text-xs text-gray-400 uppercase tracking-wider">WPM</div>
-				<div class="text-2xl font-bold text-yellow-400" x-text="wpm"></div>
-			</div>
-			<div>
-				<div class="text-xs text-gray-400 uppercase tracking-wider">CPM</div>
-				<div class="text-2xl font-bold text-purple-400" x-text="cpm"></div>
-			</div>
+
 		</div>
 	</div>
 
